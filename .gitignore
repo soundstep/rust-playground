@@ -23,4 +23,4 @@ _tmp*
 .idea
 
 # specific
-/target/
+target
