@@ -10,3 +10,4 @@ vscode:
     - hbenl.test-adapter-converter
     - equinusocio.vsc-material-theme-icons
     - Equinusocio.vsc-material-theme
+    - hbenl.vscode-test-explorer
