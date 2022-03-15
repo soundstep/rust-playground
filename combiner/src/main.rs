@@ -1,12 +1,15 @@
 mod args;
 use args::Args;
-use image::{ io::{ Reader }, ImageFormat, DynamicImage, imageops::FilterType::Triangle, GenericImageView };
-use std::{ io::BufReader, fs::File };
+use image::{ io::{ Reader }, ImageFormat, DynamicImage, imageops::FilterType::Triangle, GenericImageView, ImageError };
 use std::convert::TryInto;
 
 #[derive(Debug)]
 enum ImageDataErrors {
     DifferentImageFormats,
+    BufferTooSmall,
+    UnableToReadImageFromPath(std::io::Error),
+    UnableToFormatImage(String),
+    UnableToDecodeImage(ImageError),
 }
 
 struct FloatingImage {
@@ -27,25 +30,46 @@ impl FloatingImage {
             name,
         }
     }
+    fn set_data(&mut self, data: Vec<u8>) -> Result<(), ImageDataErrors> {
+        if data.len() > self.data.capacity() {
+            return Err(ImageDataErrors::BufferTooSmall);
+        }
+        self.data = data;
+        Ok(())
+    }
 }
 
 fn main() -> Result<(), ImageDataErrors> {
     let args = Args::new();
-    let (image_1, image_format_1) = find_image_from_path(args.image_1);
-    let (image_2, image_format_2) = find_image_from_path(args.image_2);
+    let (image_1, image_format_1) = find_image_from_path(args.image_1)?;
+    let (image_2, image_format_2) = find_image_from_path(args.image_2)?;
     if image_format_1 != image_format_2 {
         return Err(ImageDataErrors::DifferentImageFormats);
     }
     let (image_1, image_2) = standardise_size(image_1, image_2);
-    let output = FloatingImage::new(image_1.width(), image_2.height(), args.output);
+    let mut output = FloatingImage::new(image_1.width(), image_2.height(), args.output);
+    let output_name = output.name.clone();
+    let combined_data = combine_image(image_1, image_2);
+    output.set_data(combined_data)?;
+    image::save_buffer_with_format(output.name, &output.data, output.width, output.height, image::ColorType::Rgb8, image_format_1).unwrap();
+    println!("All done, saved to: {}", output_name);
     Ok(())
 }
 
-fn find_image_from_path (path: String) -> (DynamicImage, ImageFormat) {
-    let image_reader: Reader<BufReader<File>> = Reader::open(path).unwrap();
-    let image_format: ImageFormat = image_reader.format().unwrap();
-    let image: DynamicImage = image_reader.decode().unwrap();
-    (image, image_format)
+fn find_image_from_path (path: String) -> Result<(DynamicImage, ImageFormat), ImageDataErrors> {
+    match Reader::open(&path) {
+        Ok(image_reader) => {
+            if let Some(image_format) = image_reader.format() {
+                match image_reader.decode() {
+                    Ok(image) => Ok((image, image_format)),
+                    Err(e) => Err(ImageDataErrors::UnableToDecodeImage(e))
+                }
+            } else {
+                return Err(ImageDataErrors::UnableToFormatImage(path));
+            }
+        },
+        Err(e) => Err(ImageDataErrors::UnableToReadImageFromPath(e))
+    }
 }
 
 fn get_smallest_dimensions (dim_1: (u32, u32), dim_2: (u32, u32)) -> (u32, u32) {
@@ -56,10 +80,43 @@ fn get_smallest_dimensions (dim_1: (u32, u32), dim_2: (u32, u32)) -> (u32, u32) 
 
 fn standardise_size (image_1: DynamicImage, image_2: DynamicImage) -> (DynamicImage, DynamicImage) {
     let (width, height) = get_smallest_dimensions(image_1.dimensions(), image_2.dimensions());
-    println!("Width: {}, Height: {}\n", width, height);
+    println!("Width: {}, Height: {}", width, height);
     if image_2.dimensions() == (width, height) {
         (image_1.resize_exact(width, height, Triangle), image_2)
     } else {
         (image_1, image_2.resize_exact(width, height, Triangle))
     }
+}
+
+fn combine_image (image_1: DynamicImage, image_2: DynamicImage) -> Vec<u8> {
+    let vec_1 = image_1.to_rgb8().into_vec();
+    let vec_2 = image_2.to_rgb8().into_vec();
+    alternate_pixels(vec_1, vec_2)
+}
+
+fn alternate_pixels(vec_1: Vec<u8>, vec_2: Vec<u8>) -> Vec<u8> {
+    let mut combined_data = vec![0u8; vec_1.len()];
+    let mut i = 0;
+    while i < vec_1.len() {
+        if i % 8 == 0 {
+            combined_data.splice(i..= i + 3, set_rgba(&vec_1, i, i + 3));
+        }
+        else {
+            combined_data.splice(i..= i + 3, set_rgba(&vec_2, i, i + 3));
+        }
+        i += 4;
+    }
+    combined_data
+}
+
+fn set_rgba (vec: &Vec<u8>, start: usize, end: usize) -> Vec<u8> {
+    let mut rgba = Vec::new();
+    for i in start..=end {
+        let val = match vec.get(i) {
+            Some(d) => *d,
+            None => panic!("Index out of bounds!")
+        };
+        rgba.push(val);
+    }
+    rgba
 }
