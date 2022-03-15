@@ -2,8 +2,6 @@
 
 Playground for rust
 
-https://www.youtube.com/watch?v=MsocPEZBd-M&t=10s
-
 ## Notes
 
 ### Run
