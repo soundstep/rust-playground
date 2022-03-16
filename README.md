@@ -41,3 +41,9 @@ cargo watch -x 'run -- myArg'
 // watch and clear console:
 cargo watch -c -w src -x run
 ```
+
+### Generate doc (also generate doc for dependencies)
+
+```
+cargo doc --open
+```
