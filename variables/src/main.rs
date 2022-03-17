@@ -89,6 +89,15 @@ fn control_flow() {
             println!("{}!", number);
         }
     }
+    {
+        let s = String::from("Hello");
+        let bytes = s.as_bytes();
+        for (i, &item) in bytes.iter().enumerate() {
+            if item == b' ' {
+                // do something
+            }
+        }
+    }
 }
 
 fn takes_ownership(some_string: String) {
@@ -119,6 +128,21 @@ fn takes_and_gives_back(a_string: String) -> String {
     a_string // a_string is returned and moves out to the calling function
 }
 
+fn change(some_string: &mut String) {
+    some_string.push_str(", world");
+}
+
+fn first_word(s: &str) -> &str {
+    // str is the type for a string slice
+    let bytes = s.as_bytes();
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i]; // <-- slice reference
+        }
+    }
+    &s[..]
+}
+
 fn ownership() {
     {
         // https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html
@@ -146,6 +170,37 @@ fn ownership() {
         let s3 = takes_and_gives_back(s2); // s2 is moved into
                                            // takes_and_gives_back, which also
                                            // moves its return value into s3
+    }
+    {
+        let mut s = String::from("hello");
+        change(&mut s);
+    }
+    {
+        let mut s = String::from("hello");
+        let r1 = &s; // no problem
+        let r2 = &s; // no problem
+                     // let r3 = &mut s; // BIG PROBLEM
+                     // println!("{}, {}, and {}", r1, r2, r3);
+    }
+    {
+        let my_string = String::from("hello world");
+
+        // `first_word` works on slices of `String`s, whether partial or whole
+        let word = first_word(&my_string[0..6]);
+        let word = first_word(&my_string[..]);
+        // `first_word` also works on references to `String`s, which are equivalent
+        // to whole slices of `String`s
+        let word = first_word(&my_string);
+
+        let my_string_literal = "hello world";
+
+        // `first_word` works on slices of string literals, whether partial or whole
+        let word = first_word(&my_string_literal[0..6]);
+        let word = first_word(&my_string_literal[..]);
+
+        // Because string literals *are* string slices already,
+        // this works too, without the slice syntax!
+        let word = first_word(my_string_literal);
     }
 }
 
