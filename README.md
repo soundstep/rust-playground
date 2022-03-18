@@ -10,6 +10,13 @@ Playground for rust
 cargo run -- myArg
 ```
 
+Run one file only:
+
+```bash
+cargo install cargo-script
+cargo script src/struct.rs
+```
+
 ### Build
 
 ```bash
