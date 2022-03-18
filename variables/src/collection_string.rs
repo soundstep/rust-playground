@@ -44,4 +44,19 @@ fn main() {
         let s = format!("{}-{}-{}", s1, s2, s3);
         println!("s is {}", s);
     }
+    {
+        let hello = "Здравствуйте";
+        let s = &hello[0..4];
+        println!("s is {}", s);
+    }
+    {
+        for c in "नमस्ते".chars() {
+            println!("{}", c);
+        }
+    }
+    {
+        for b in "नमस्ते".bytes() {
+            println!("{}", b);
+        }
+    }
 }
