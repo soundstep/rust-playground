@@ -54,3 +54,9 @@ cargo watch -c -w src -x run
 ```bash
 cargo doc --open
 ```
+
+### Create a lib inside a project
+
+```
+cargo new --lib my_lib
+```
