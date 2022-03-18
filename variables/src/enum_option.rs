@@ -1,4 +1,4 @@
-// cargo script src/enum-option.rs
+// cargo script src/enum_option.rs
 
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {

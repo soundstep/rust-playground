@@ -1,4 +1,4 @@
-// cargo script src/enum-control-flow.rs
+// cargo script src/enum_control-flow.rs
 
 #[derive(Debug)]
 enum UsState {

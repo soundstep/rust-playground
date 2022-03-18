@@ -1,4 +1,4 @@
-// cargo script src/enum-concise.rs
+// cargo script src/enum_concise.rs
 
 #[derive(Debug)]
 enum IpAddr {
