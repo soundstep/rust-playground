@@ -60,3 +60,22 @@ cargo doc --open
 ```
 cargo new --lib my_lib
 ```
+
+### Run test
+
+```
+// run all
+cargo test
+// run serially
+cargo test -- --test-threads=1
+// run one
+cargo test -- my_test
+cargo test --test integration_test
+```
+
+Ignore one test:
+
+```
+#[test]
+#[ignore]
+```
