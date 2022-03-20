@@ -71,6 +71,8 @@ cargo test -- --test-threads=1
 // run one
 cargo test -- my_test
 cargo test --test integration_test
+// show print even if successful
+cargo test -- --nocapture
 ```
 
 Ignore one test:
