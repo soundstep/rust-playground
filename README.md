@@ -4,6 +4,12 @@ Playground for rust
 
 ## Notes
 
+### Create project
+
+```bash
+cargo new my_project
+```
+
 ### Run
 
 ```bash
