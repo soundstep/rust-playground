@@ -23,6 +23,12 @@ cargo install cargo-script
 cargo script src/struct.rs
 ```
 
+Run a package in workspace:
+
+```bash
+cargo run -p my_package
+```
+
 ### Build
 
 ```bash
@@ -79,6 +85,8 @@ cargo test -- my_test
 cargo test --test integration_test
 // show print even if successful
 cargo test -- --nocapture
+// run tests of a specific package in a workspace
+cargo test -p my_package
 ```
 
 Ignore one test:
