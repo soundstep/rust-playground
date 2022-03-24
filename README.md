@@ -95,3 +95,25 @@ Ignore one test:
 #[test]
 #[ignore]
 ```
+
+### Monitor threads
+
+Name the thread:
+
+```
+let builder = thread::Builder::new().name("foo".into());
+```
+
+Filter threads using [htop](https://htop.dev/).
+
+```
+htop
+```
+
+Show custom name in htop:
+
+F2 (Setup) > Display Options > Show custom thread names
+
+Filter thread name:
+
+F4 (Filter) > foo
