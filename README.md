@@ -43,6 +43,12 @@ Run a package in workspace:
 cargo run -p my_package
 ```
 
+### Check the code without running
+
+```
+cargo check
+```
+
 ### Build
 
 ```bash
