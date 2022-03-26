@@ -2,6 +2,8 @@
 
 Playground for rust
 
+More info on [WASM](./WASM.md).
+
 ## Notes
 
 ### Create project
