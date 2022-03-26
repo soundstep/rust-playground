@@ -8,10 +8,15 @@ use std::thread;
 use std::time::Duration;
 
 fn main() {
+    let host = "127.0.0.1";
+    let port = "7878";
     println!("Server pid is {}", process::id());
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let listener = TcpListener::bind(format!("{}:{}", host, port)).unwrap();
+    println!("Listening on {}:{}", host, port);
     let pool = ThreadPool::new(4);
-    for stream in listener.incoming().take(2) {
+    // uncomment to simulate shutdown
+    // for stream in listener.incoming().take(2) {
+    for stream in listener.incoming() {
         let stream = stream.unwrap();
         pool.execute(|| {
             handle_connection(stream);
