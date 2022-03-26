@@ -10,6 +10,20 @@ Playground for rust
 cargo new my_project
 ```
 
+Create a lib inside a project:
+
+```
+cargo new --lib my_lib
+```
+
+Create a derive macro inside a my_project:
+
+```
+cargo new hello_macro --lib
+cd hello_macro
+cargo new hello_macro_derive --lib
+```
+
 ### Run
 
 ```bash
@@ -65,12 +79,6 @@ cargo watch -c -w src -x run
 
 ```bash
 cargo doc --open
-```
-
-### Create a lib inside a project
-
-```
-cargo new --lib my_lib
 ```
 
 ### Run test
