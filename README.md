@@ -2,7 +2,29 @@
 
 Playground for rust
 
+More info on [WASM](./WASM.md).
+
 ## Notes
+
+### Create project
+
+```bash
+cargo new my_project
+```
+
+Create a lib inside a project:
+
+```
+cargo new --lib my_lib
+```
+
+Create a derive macro inside a my_project:
+
+```
+cargo new hello_macro --lib
+cd hello_macro
+cargo new hello_macro_derive --lib
+```
 
 ### Run
 
@@ -15,6 +37,18 @@ Run one file only:
 ```bash
 cargo install cargo-script
 cargo script src/struct.rs
+```
+
+Run a package in workspace:
+
+```bash
+cargo run -p my_package
+```
+
+### Check the code without running
+
+```
+cargo check
 ```
 
 ### Build
@@ -55,11 +89,41 @@ cargo watch -c -w src -x run
 cargo doc --open
 ```
 
-### Create a lib inside a project
+### Run test
 
 ```
-cargo new --lib my_lib
+// run all
+cargo test
+// run serially
+cargo test -- --test-threads=1
+// run one
+cargo test -- my_test
+cargo test --test integration_test
+// show print even if successful
+cargo test -- --nocapture
+// run tests of a specific package in a workspace
+cargo test -p my_package
 ```
+
+Ignore one test:
+
+```
+#[test]
+#[ignore]
+```
+
+### Monitor threads
+
+Name the thread:
+
+```
+let builder = thread::Builder::new().name("foo".into());
+```
+
+Filter threads using [htop](https://htop.dev/).
+
+```
+<<<<<<< HEAD
 
 ### Manage Rust version
 
@@ -88,3 +152,15 @@ Switch between nightly or stable:
 rustup default nightly
 rustup default stable
 ```
+=======
+htop
+```
+
+Show custom name in htop:
+
+F2 (Setup) > Display Options > Show custom thread names
+
+Filter thread name:
+
+F4 (Filter) > foo
+>>>>>>> 5da5479c7dd45d9041a5e8917c06d8c160a562b7

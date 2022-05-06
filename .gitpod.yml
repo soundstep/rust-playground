@@ -11,3 +11,4 @@ vscode:
     - equinusocio.vsc-material-theme-icons
     - Equinusocio.vsc-material-theme
     - hbenl.vscode-test-explorer
+    - vadimcn.vscode-lldb
