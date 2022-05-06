@@ -60,3 +60,31 @@ cargo doc --open
 ```
 cargo new --lib my_lib
 ```
+
+### Manage Rust version
+
+List:
+
+```
+rustup toolchain list
+```
+
+Update:
+
+```
+rustup update
+```
+
+Install nightly or stable:
+
+```
+rustup install nightly
+rustup install stable
+```
+
+Switch between nightly or stable:
+
+```
+rustup default nightly
+rustup default stable
+```
