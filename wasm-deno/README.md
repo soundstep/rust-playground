@@ -9,4 +9,4 @@ deno run main.js
 deno run --allow-net --allow-read=. https://deno.land/std@0.144.0/http/file_server.ts
 ```
 
-https://healthy-heron-56.deno.dev/
+https://soundstep-rust-deno-demo.deno.dev/
